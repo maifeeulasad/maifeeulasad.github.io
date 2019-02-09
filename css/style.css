@@ -43,6 +43,15 @@ canvas{
   vertical-align:bottom;
 }
 
+css/fonts/chequered-ink_hot-bleb/Hot Bleb.otf
+
+@font-face {
+/*
+font-family: "Harabara Bold";
+*/
+src: 
+url("css/fonts/chequered-ink_hot-bleb/Hot Bleb.otf") format("opentype");
+}
 
 /* ---- stats.js ---- */
 
