@@ -1,11 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Maifee</title>
+  <meta charset="utf-8">
+  <title>MUA</title>
+  <link rel="stylesheet" media="screen" href="css/style.css">
+  <link rel="stylesheet" media="screen" href="css/bootstrap.css">
+  <link rel="shortcut icon" type="image" href="icon.jpg" />
 </head>
 <body>
-<div align="center">
-Maifee Ul Asad
+
+<!-- particles.js container -->
+<div id="particles-js">
+
+
+
+<div class="content">
+		<center>
+			</br>
+			</br>
+			</br>
+			</br>
+			</br>
+			</br>
+			</br>
+			</br>
+			</br>
+			<h1 style="font-size:32px">I am Maifee Ul Asad</h1>
+			</br>
+			</br>
+			</br>
+			<p style="font-size:20px">I live in Chittagong, Bangladesh.</p>
+			<p style="font-size:20px">I study CSE in <a href="http://cu.ac.bd/ctguni/" target="_blank">CU</a>.</p> 
+			<p style="font-size:20px">I obsess on building my solo indie video games and softwares when I'm not <a href="https://www.linkedin.com/in/maifee-ul-asad/" target="_blank">working</a>.</p>
+			<p style="font-size:20px">I write <a href="https://github.com/maifeeulasad" target="_blank">code</a> and write <a href="https://www.facebook.com/maifeeulasad007sE" target="_blank">idiotic comments</a> about the things I see.</p>
+			<p style="font-size:20px">I am now working with <a href="https://www.facebook.com/team.zeroth.bd/" target="_blank">Team Zeroth BD</a> , trying to make games , animations and software.</p>
+		</center>
+    </div>
+
+
+
+
+
+
+
 </div>
+
+<!-- scripts -->
+<script src="particles.js"></script>
+<script src="js/app.js"></script>
+
+	
+
+<script>
+  var count_particles, stats, update;
+  stats = new Stats;
+  stats.setMode(0);
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+  document.body.appendChild(stats.domElement);
+  count_particles = document.querySelector('.js-count-particles');
+  update = function() {
+    stats.begin();
+    stats.end();
+    if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+      count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+    }
+    requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+</script>
+
 </body>
 </html>
