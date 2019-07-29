@@ -1,28 +1,28 @@
 {
-  "name": "particles.js",
-  "version": "2.0.0",
-  "description": "A lightweight JavaScript library for creating particles",
-  "homepage": "http://vincentgarreau.com/particles.js",
+  "name": "devportfolio-template",
+  "version": "1.1.3",
+  "description": "",
+  "main": "js/scripts.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/VincentGarreau/particles.js.git"
+    "watch": "gulp watch"
   },
   "keywords": [
-    "particles",
-    "particle",
-    "canvas"
+    "portfolio",
+    "personal",
+    "website",
+    "tech",
+    "coding",
+    "dev"
   ],
-  "author": "Vincent Garreau",
+  "author": "Ryan Fitzgerald",
   "license": "MIT",
-  "files": [
-    "particles.js",
-    "particles.min.js"
-  ],
-  "bugs": {
-    "url": "https://github.com/VincentGarreau/particles.js/issues"
-  },
-  "homepage": "https://github.com/VincentGarreau/particles.js"
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-autoprefixer": "^6.0.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify": "^3.0.1",
+    "gulp-wait": "0.0.2"
+  }
 }
