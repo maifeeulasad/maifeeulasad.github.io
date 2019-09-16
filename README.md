@@ -13,11 +13,6 @@
 
 ### 🏠 [Homepage]( https://github.com/maifeeulasad/maifeeulasad.github.io )
 
-## Install
-
-```sh
-npm install
-```
 
 ## Author
 
