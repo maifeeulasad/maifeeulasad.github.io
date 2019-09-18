@@ -8,7 +8,7 @@
     <img alt="Twitter: Maifeeulasad " src="https://img.shields.io/twitter/follow/Maifeeulasad .svg?style=social" target="_blank" />
   </a>
   <a href="https://github.com/maifeeulasad ">
-    <img alt="GitHub: maifeeulasad " src="https://img.shields.io/github/followers/maifeeulasad .svg?style=social target="_blank" />
+    <img alt="GitHub: maifeeulasad " src="https://img.shields.io/github/followers/maifeeulasad />
   </a>
   
   
