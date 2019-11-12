@@ -25,13 +25,7 @@
     });
 </script>
 
-<script>
-    var img = new Image();
-    let filename = 'IMG20191106172456.jpg'
-    img.src = "img/" + filename;
-    $("row first").append("<li><img src='" + "img/" + filename + "'></li>");
-    console.log(img.src);
-</script>
+
 
 </head>
 <style>
@@ -73,7 +67,17 @@
     </div> <!-- /container -->
 
 
+<script>
+  $(function(){ 
+    
+    var img = new Image();
+    let filename = 'IMG20191106172456.jpg'
+    img.src = "img/" + filename;
+    $(".row.first").append("<li><img src='" + "img/" + filename + "'></li>");
+    console.log(img.src);
 
+});
+</script>
 
 
 
