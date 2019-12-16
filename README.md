@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to maifeeulasad.github.io 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.1-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
   <a href=" https://github.com/maifeeulasad/maifeeulasad.github.io /blob/master/LICENSE.md ">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg" target="_blank" />
   </a>
