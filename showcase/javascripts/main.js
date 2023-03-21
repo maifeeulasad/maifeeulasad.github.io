@@ -1,7 +1,7 @@
 try { if (!pt){ pt = {}; } } catch(e){pt = {};}
 
 $(document).ready(function(){
-    $.getJSON("https://api.github.com/users/maifeeulasad/repos?per_page=100")
+    $.getJSON("https://api.github.com/users/maifeeulasad/repos?per_page=100&callback=?")
         .then(function(projects){
             var h = "";
             $.each(projects.data, function(i, p) {
