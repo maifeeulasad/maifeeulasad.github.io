@@ -12,7 +12,7 @@ import Skills from './components/Skills';
 import Footer from './components/Footer';
 
 function App() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [_, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
