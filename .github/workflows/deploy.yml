@@ -40,6 +40,9 @@ jobs:
       - name: Copy assets to dist
         run: cp -r assets dist/
 
+      - name: Add .nojekyll file
+        run: touch dist/.nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
