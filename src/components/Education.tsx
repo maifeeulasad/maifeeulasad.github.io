@@ -4,7 +4,7 @@ const education = [
     logo: 'https://img.logo.dev/bau.edu.bd?token=pk_PEzUIRNTScaVBfae7LqPUw&retina=true',
     degree: 'M.Sc. in Computer Science & Mathematics',
     school: 'Bangladesh Agricultural University',
-    activities: 'Research: Semantic Similarity | Supervisor: Dr. Machbah Uddin | Position: First Class First (1st & 2nd Semester) | Awaiting thesis submission',
+    activities: 'Research: Semantic Similarity | Supervisor: Dr. Machbah Uddin | Position: First Class First',
     year: '2023-25',
     location: 'Mymensingh, Bangladesh',
   },
