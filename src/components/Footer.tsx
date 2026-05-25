@@ -58,7 +58,7 @@ const Footer = () => {
               </div>
               <div>
                 <a
-                  href="https://linkedin.com/in/maifeeulasad"
+                  href="https://www.linkedin.com/in/maifee-ul-asad/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-black hover:text-gray-600 transition-colors"
