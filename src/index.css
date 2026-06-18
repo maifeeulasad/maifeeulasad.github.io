@@ -3,6 +3,7 @@
 
 * {
   cursor: default;
+  box-sizing: border-box;
 }
 
 @keyframes marquee {
@@ -30,5 +31,7 @@ body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  width: 100%;
 }
 
