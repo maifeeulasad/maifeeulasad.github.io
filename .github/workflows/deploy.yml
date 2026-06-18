@@ -41,7 +41,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: './dist'
           retention-days: 1
@@ -60,7 +60,7 @@ jobs:
           token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
 
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
           path: ./dist
 
