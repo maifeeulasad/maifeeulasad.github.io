@@ -55,7 +55,7 @@ jobs:
           
       - name: Prepare environment
         run: |
-          git checkout -b gh-pages
+          git checkout gh-pages
           git pull
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
