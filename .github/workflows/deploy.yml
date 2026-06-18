@@ -71,5 +71,5 @@ jobs:
         run: |
           mv ./dist/* ./
           git add .
-          git commit -m "gh pages" || echo "No changes to commit"
+          git commit -m "gh pages - $(date)" || echo "No changes to commit"
           git push --set-upstream origin gh-pages
