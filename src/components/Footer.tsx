@@ -106,7 +106,7 @@ const Footer = () => {
       <div className="bg-white border-t border-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-gray-400 space-y-2 sm:space-y-0">
-            <div className="text-center sm:text-left">Copyright © 2025 Maifee Ul Asad</div>
+            <div className="text-center sm:text-left">Copyright © 2026 Maifee Ul Asad</div>
             <div className="flex items-center">
               Built with React, TypeScript & Tailwind CSS
             </div>
