@@ -197,7 +197,7 @@ const resolve = (p: string) => {
       <ul class="search-results" id="search-results"></ul>
     </dialog>
 
-    <script src={`${site.base}/js/site.js`}></script>
+    <script is:inline src={`${site.base}/js/site.js`} defer></script>
 
     <!-- used by BrandIcon so the component is always picked up even when not rendered in this page -->
     <template hidden><BrandIcon name="github" /></template>
