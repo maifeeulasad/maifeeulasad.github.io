@@ -6,8 +6,8 @@ tags: [meta, astro, writing]
 ---
 
 This is the first post on the new writing section. The resume site stays where
-it was. This journal lives at `/blog/` as its own Astro build, pre-rendered to
-static HTML for SEO and dropped in next to the React bundle at deploy time.
+it was. This journal lives at `/writing/` as its own Astro build, pre-rendered
+to static HTML for SEO and dropped in next to the React bundle at deploy time.
 
 ## Why Astro
 

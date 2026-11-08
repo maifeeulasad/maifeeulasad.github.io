@@ -78,13 +78,13 @@ export const site = {
       href: 'https://stackoverflow.com/users/9152501',
       brand: 'stackoverflow',
     },
-    { title: 'RSS feed', href: '/blog/rss.xml', icon: 'rss_feed' },
+    { title: 'RSS feed', href: '/writing/rss.xml', icon: 'rss_feed' },
   ] as SocialLink[],
 
   // Top nav strip — matches the resume site structure
   nav: [
     { label: 'Home', href: '/' },
-    { label: 'Writing', href: '/blog/' },
+    { label: 'Writing', href: '/writing/' },
     { label: 'Projects', href: '/#projects' },
     { label: 'About', href: '/#about' },
   ],
@@ -103,7 +103,7 @@ export const site = {
     {
       icon: 'chevron_right' as const,
       label: 'XML Feed (RSS 2.0)',
-      href: '/blog/rss.xml',
+      href: '/writing/rss.xml',
       count: 'xml',
     },
   ] as Array<{
@@ -116,11 +116,11 @@ export const site = {
 
   // SEO defaults
   url: 'https://maifeeulasad.github.io',
-  base: '/blog',
+  base: '/writing',
   title: 'Writing',
   description:
     'Notes, fixes and deep-dives from building full-stack systems and shipping ML to production.',
-  image: '/blog/og-default.png',
+  image: '/writing/og-default.png',
   lang: 'en',
   twitterCard: 'summary_large_image' as const,
 

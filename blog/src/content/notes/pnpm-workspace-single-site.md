@@ -28,10 +28,16 @@ packages:
 ```js
 // blog/astro.config.mjs
 export default defineConfig({
-  base: '/blog',
-  outDir: '../dist/blog',
+  base: '/writing',
+  outDir: '../dist/writing',
 });
 ```
 
-Now `pnpm build` writes `dist/` + `dist/blog/`, and GitHub Pages serves both
+Now `pnpm build` writes `dist/` + `dist/writing/`, and GitHub Pages serves both
 from the same artifact. No CI changes, no router shim, no cross-origin.
+
+> One gotcha: the first choice of mount point was `/blog/`, which was already
+> taken by a separate `username/blog` project repo on the same user page.
+> GitHub serves project pages at `username.github.io/<repo>/` and they shadow
+> any subpath you push under the user-page repo. Pick a mount that no repo of
+> yours owns.

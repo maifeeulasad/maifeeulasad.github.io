@@ -7,9 +7,9 @@ import sitemap from '@astrojs/sitemap';
 // deploys ../dist) picks it up without changes.
 export default defineConfig({
   site: 'https://maifeeulasad.github.io',
-  base: '/blog',
+  base: '/writing',
   trailingSlash: 'always',
-  outDir: '../dist/blog',
+  outDir: '../dist/writing',
   build: {
     assets: 'assets',
     format: 'directory',

@@ -1,8 +1,15 @@
-# The /blog subproject
+# The writing subproject
 
-A dedicated Astro project that renders the writing section of the site. It
-lives at `/blog/` on the deployed domain and builds as a workspace package
-next to the React resume.
+A dedicated Astro project that renders the writing section of the site. The
+source lives under `blog/` in the repo, builds as a workspace package next
+to the React resume, and is mounted at `/writing/` on the deployed domain.
+
+> **Why `/writing/` and not `/blog/`?** A separate `maifeeulasad/blog`
+> project repo already owns `maifeeulasad.github.io/blog/`. Project pages
+> shadow any subpath you push to your user-page repo, so mounting here
+> would be invisible. If you free up `/blog/` later, change `base` and
+> `outDir` in `blog/astro.config.mjs` and the two scripts in
+> `package.json`, then rename `dist/writing` → `dist/blog`.
 
 ## Layout
 
@@ -10,7 +17,7 @@ next to the React resume.
 maifeeulasad.github.io/
 ├── src/                         # React resume (unchanged)
 ├── blog/                        # <- this subproject
-│   ├── astro.config.mjs         # base: '/blog', outDir: '../dist/blog'
+│   ├── astro.config.mjs         # base: '/writing', outDir: '../dist/writing'
 │   ├── package.json             # astro, @astrojs/rss, @astrojs/sitemap
 │   ├── public/
 │   │   ├── favicon.svg
@@ -41,7 +48,7 @@ maifeeulasad.github.io/
 │           ├── rss.xml.ts                        # RSS 2.0
 │           └── search.json.ts                    # client-side index
 └── dist/
-    └── blog/              # <- Astro writes here, deploy picks it up
+    └── writing/          # <- Astro writes here, deploy picks it up
 ```
 
 ## How the two sites deploy together
@@ -54,10 +61,10 @@ packages. The root build script runs both builds:
 "build": "tsc -b && vite build && pnpm --filter blog build"
 ```
 
-Astro is configured with `outDir: '../dist/blog'`, so its output lands
+Astro is configured with `outDir: '../dist/writing'`, so its output lands
 inside the React build's `dist/`. The existing GitHub Pages workflow
 (`.github/workflows/deploy.yml`) uploads `dist/` unchanged. Nothing in CI
-needs to know the blog exists.
+needs to know the writing subproject exists.
 
 ## Writing a post
 
@@ -76,7 +83,7 @@ needs to know the blog exists.
    updated: 2026-11-09   # optional
    tags: [tag-one, tag-two]
    draft: false          # optional; drafts are excluded from lists, RSS, search
-   image: /blog/og/your-post.png   # optional OG image
+   image: /writing/og/your-post.png   # optional OG image
    ---
 
    The post body in markdown. Code fences, headings and the usual GFM work.
@@ -155,8 +162,8 @@ Everything on the sidebar comes from `blog/src/config/site.ts`:
 - The home and collection pages ship `WebSite` JSON-LD; single posts ship
   `BlogPosting` with the author, dates and tags.
 - `@astrojs/sitemap` writes `sitemap-index.xml` and `sitemap-0.xml` under
-  `/blog/`.
-- `/blog/rss.xml` is a real RSS 2.0 feed built from all collections.
+  `/writing/`.
+- `/writing/rss.xml` is a real RSS 2.0 feed built from all collections.
 
 ## Dark mode
 
@@ -166,7 +173,7 @@ toggle in the header updates both the attribute and `localStorage`.
 
 ## Search
 
-`/blog/search.json` is a build-time JSON index of all posts' title, url,
+`/writing/search.json` is a build-time JSON index of all posts' title, url,
 date and categories. The ⌘K dialog in `blog/public/js/site.js` fetches it
 once per session and filters client-side.
 
@@ -177,8 +184,8 @@ once per session and filters client-side.
 | `pnpm install` | install both apps' deps |
 | `pnpm dev:blog` | Astro dev server on :4321 |
 | `pnpm dev` | Vite dev server for the React resume |
-| `pnpm build` | build **both** — resume to `dist/`, blog to `dist/blog/` |
-| `pnpm build:blog` | build the blog only |
+| `pnpm build` | build **both** — resume to `dist/`, writing to `dist/writing/` |
+| `pnpm build:blog` | build the writing subproject only |
 | `pnpm build:site` | build the resume only |
 
 ## Credits

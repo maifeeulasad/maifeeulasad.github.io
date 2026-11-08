@@ -34,8 +34,11 @@ Rather than cram a blog into the React bundle or move to Next.js, we went
 with a side-by-side approach:
 
 - The resume stays at `/` as the same Vite + React 19 build.
-- A new Astro project under `blog/` builds to `../dist/blog`, so the existing
-  GitHub Pages workflow already deploys it.
+- A new Astro project under `blog/` builds to `../dist/writing`, so the
+  existing GitHub Pages workflow already deploys it. (The *mount* is
+  `/writing/`, not `/blog/`, because a separate `maifeeulasad/blog` project
+  repo already owns `maifeeulasad.github.io/blog/` — project pages shadow
+  user-page subpaths.)
 - Content lives in `blog/src/content/{journal,notes}/*.md` with frontmatter.
 - One file, `blog/src/config/site.ts`, drives the whole sidebar and the
   collection list. Adding a new section is three lines of config.
@@ -59,8 +62,8 @@ packages:
 ```js
 // blog/astro.config.mjs
 export default defineConfig({
-  base: '/blog',
-  outDir: '../dist/blog',
+  base: '/writing',
+  outDir: '../dist/writing',
 });
 ```
 

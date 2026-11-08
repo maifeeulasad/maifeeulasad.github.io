@@ -14,7 +14,7 @@ keep mine on plain Vite + React.
 - `import { X } from 'lib'` is a lie when `lib` has no tree-shaking.
   Check with `vite build --mode=analyze` before adding anything to the
   resume page.
-- Lazy-load routes that only visitors to `/blog/` need. The resume page does
+- Lazy-load routes that only visitors to `/writing/` need. The resume page does
   not need the markdown parser.
 
 ## Images are the whole budget
@@ -28,4 +28,5 @@ equivalent.
 
 If more than a quarter of your content is written material that benefits from
 SEO, you probably want static HTML on those pages — that is why the writing
-section of this site runs on Astro and ships as HTML next to the React bundle.
+section of this site (`/writing/`) runs on Astro and ships as HTML next to
+the React bundle.
