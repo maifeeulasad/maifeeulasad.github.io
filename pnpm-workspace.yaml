@@ -1,3 +1,7 @@
+packages:
+  - '.'
+  - blog
+
 overrides:
   esbuild@>=0.27.3 <0.28.1: '>=0.28.1'
   flatted@<3.4.0: '>=3.4.0'

@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && pnpm --filter blog build",
+    "build:site": "tsc -b && vite build",
+    "build:blog": "pnpm --filter blog build",
+    "dev:blog": "pnpm --filter blog dev",
     "lint": "eslint .",
     "preview": "vite preview"
   },

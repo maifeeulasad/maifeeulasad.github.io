@@ -73,3 +73,5 @@ node_modules/
 # Build output
 dist/
 build/
+blog/.astro/
+blog/node_modules/
