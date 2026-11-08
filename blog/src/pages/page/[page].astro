@@ -7,9 +7,8 @@ import Pager from '../../components/Pager.astro';
 import { getCollection } from 'astro:content';
 import { collections, site } from '../../config/site';
 
-const PER_PAGE = 10;
-
 export const getStaticPaths = (async () => {
+  const perPage = 10;
   const featured = collections.filter((c) => c.featured).map((c) => c.id);
   let all: Awaited<ReturnType<typeof getCollection>> = [];
   for (const id of featured) {
@@ -18,13 +17,14 @@ export const getStaticPaths = (async () => {
   }
   all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
   const total = all.length;
-  const lastPage = Math.max(1, Math.ceil(total / PER_PAGE));
+  const lastPage = Math.max(1, Math.ceil(total / perPage));
   const items: GetStaticPathsItem[] = [];
   for (let p = 2; p <= lastPage; p++) {
     items.push({
       params: { page: String(p) },
       props: {
-        posts: all.slice((p - 1) * PER_PAGE, p * PER_PAGE),
+        posts: all.slice((p - 1) * perPage, p * perPage),
+        perPage,
         total,
         lastPage,
         current: p,
@@ -34,14 +34,15 @@ export const getStaticPaths = (async () => {
   return items;
 }) satisfies GetStaticPaths;
 
-const { posts, total, lastPage, current } = Astro.props as {
+const { posts, perPage, total, lastPage, current } = Astro.props as {
   posts: Awaited<ReturnType<typeof getCollection>>;
+  perPage: number;
   total: number;
   lastPage: number;
   current: number;
 };
 
-const offset = (current - 1) * PER_PAGE;
+const offset = (current - 1) * perPage;
 const first = offset + 1;
 const last = offset + posts.length;
 
