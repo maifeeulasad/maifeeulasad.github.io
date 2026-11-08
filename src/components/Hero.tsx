@@ -11,8 +11,8 @@ const Hero = () => {
                 <div className="relative mb-8">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 rounded-full blur-lg opacity-30 animate-pulse"></div>
                   <div className="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
-                    <div className="w-full h-full bg-gradient-to-br from-purple-500 via-blue-500 to-pink-500 flex items-center justify-center text-white text-6xl font-bold">
-                      MU
+                    <div className="w-full h-full bg-gradient-to-br from-purple-500 via-blue-500 to-pink-500 flex items-center justify-center text-white text-5xl font-bold">
+                      MUA
                     </div>
                   </div>
                 </div>
@@ -51,8 +51,8 @@ const Hero = () => {
           </div>
           <div className="w-[45%] h-full bg-gradient-to-br from-purple-500 via-blue-500 to-pink-500 flex items-center justify-center relative">
             <div className="w-full h-full relative overflow-hidden flex items-center justify-center">
-              <div className="text-white text-[20rem] font-black opacity-20">
-                MU
+              <div className="text-white text-[18rem] font-black opacity-20">
+                MUA
               </div>
             </div>
           </div>

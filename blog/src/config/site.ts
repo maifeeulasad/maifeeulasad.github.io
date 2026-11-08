@@ -47,7 +47,7 @@ export interface NavSection {
 
 export const site = {
   author: 'Maifee Ul Asad',
-  initials: 'MU',
+  initials: 'MUA',
   tagline: 'Full Stack Engineer · ML Enthusiast',
   status: 'Open to opportunities',
   about:
