@@ -1,0 +1,102 @@
+---
+import { getCollection as getContentCollection } from 'astro:content';
+import { site, collections } from '../config/site';
+import BrandIcon from './BrandIcon.astro';
+
+interface Props {
+  // Which section to mark as the active one (matches sidebarSections[].id or label)
+  active?: string;
+}
+const { active } = Astro.props;
+
+// Build a map of collection id -> live post count (excluding drafts).
+const counts: Record<string, number> = {};
+await Promise.all(
+  collections.map(async (c) => {
+    const posts = await getContentCollection(c.id as 'journal' | 'notes');
+    counts[c.id] = posts.filter((p) => !p.data.draft).length;
+  })
+);
+
+function resolveHref(entry: (typeof site.sidebarSections)[number]): string {
+  if (entry.href) return entry.href;
+  if (entry.id) {
+    const c = collections.find((x) => x.id === entry.id);
+    return `${site.base}/${c?.id ?? ''}/`;
+  }
+  return site.base + '/';
+}
+
+function resolveCount(entry: (typeof site.sidebarSections)[number]): number | string | undefined {
+  if (entry.id) return counts[entry.id];
+  return entry.count;
+}
+---
+<aside class="profile">
+  <div class="profile-top">
+    <div class="profile-avatar">
+      {site.initials}<span class="dot" title={site.status}></span>
+    </div>
+    {site.status && <span class="status">{site.status}</span>}
+  </div>
+  <div>
+    <h2>{site.author}</h2>
+    <p>{site.about}</p>
+  </div>
+
+  {site.profileStats.length > 0 && (
+    <div class="stats">
+      {site.profileStats.map((s) => (
+        <div class="stat">
+          <span>{s.label}</span>
+          <span>{s.value}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {site.stack.length > 0 && (
+    <div class="stack">
+      <div class="eyebrow" style="margin-bottom:.5rem">Core Technologies</div>
+      <div class="pills">
+        {site.stack.map((t) => <span class="pill">{t}</span>)}
+      </div>
+    </div>
+  )}
+
+  <div class="socials">
+    {site.socials.map((l) => (
+      <a
+        href={l.href}
+        title={l.title}
+        target={l.href.startsWith('http') ? '_blank' : undefined}
+        rel={l.href.startsWith('http') ? 'noopener' : undefined}
+      >
+        {l.brand ? <BrandIcon name={l.brand} /> : <span class="icon">{l.icon}</span>}
+      </a>
+    ))}
+  </div>
+
+  <div>
+    <div class="eyebrow" style="margin-bottom:.75rem">Sections</div>
+    <nav class="section-nav">
+      {site.sidebarSections.map((entry) => {
+        const href = resolveHref(entry);
+        const isActive = active && (entry.id === active || entry.label === active);
+        const count = resolveCount(entry);
+        const countPlain = typeof count === 'string';
+        return (
+          <a href={href} class={isActive ? 'active' : undefined}>
+            <span>
+              <span class="icon">{entry.icon}</span>
+              {entry.label}
+            </span>
+            {count !== undefined && (
+              <span class={`count${countPlain ? ' plain' : ''}`}>{count}</span>
+            )}
+          </a>
+        );
+      })}
+    </nav>
+  </div>
+</aside>

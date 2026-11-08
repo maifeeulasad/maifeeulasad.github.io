@@ -1,0 +1,70 @@
+---
+interface Props {
+  page: {
+    currentPage: number;
+    lastPage: number;
+    url: { prev?: string; next?: string; first?: string; current: string };
+  };
+  // (first - last) of (total)
+  first: number;
+  last: number;
+  total: number;
+  // Resolves a page number to its URL (so collection and index pagers can share this component)
+  pageUrl: (n: number) => string;
+}
+const { page, first, last, total, pageUrl } = Astro.props;
+
+const windowLo = page.currentPage - 1;
+const windowHi = page.currentPage + 1;
+const pages: Array<{ n: number; gap?: false } | { gap: true }> = [];
+let gapShown = false;
+for (let n = 1; n <= page.lastPage; n++) {
+  if (n === 1 || n === page.lastPage || (n >= windowLo && n <= windowHi)) {
+    pages.push({ n });
+    gapShown = false;
+  } else if (!gapShown) {
+    pages.push({ gap: true });
+    gapShown = true;
+  }
+}
+---
+<div class="pager">
+  <div>
+    Showing <b>{first}–{last}</b> of <b>{total}</b> posts
+  </div>
+  {page.lastPage > 1 && (
+    <nav aria-label="Pagination">
+      {page.url.prev ? (
+        <>
+          <a href={pageUrl(1)}><span class="icon">keyboard_double_arrow_left</span><span class="word">First</span></a>
+          <a href={page.url.prev} aria-label="Previous"><span class="icon">chevron_left</span></a>
+        </>
+      ) : (
+        <>
+          <span class="disabled"><span class="icon">keyboard_double_arrow_left</span><span class="word">First</span></span>
+          <span class="disabled"><span class="icon">chevron_left</span></span>
+        </>
+      )}
+      {pages.map((p) =>
+        'gap' in p ? (
+          <span class="gap" aria-hidden="true">…</span>
+        ) : p.n === page.currentPage ? (
+          <span class="current" aria-current="page">{p.n}</span>
+        ) : (
+          <a href={pageUrl(p.n)}>{p.n}</a>
+        )
+      )}
+      {page.url.next ? (
+        <>
+          <a href={page.url.next} aria-label="Next"><span class="icon">chevron_right</span></a>
+          <a href={pageUrl(page.lastPage)}><span class="word">Last</span><span class="icon">keyboard_double_arrow_right</span></a>
+        </>
+      ) : (
+        <>
+          <span class="disabled"><span class="icon">chevron_right</span></span>
+          <span class="disabled"><span class="word">Last</span><span class="icon">keyboard_double_arrow_right</span></span>
+        </>
+      )}
+    </nav>
+  )}
+</div>

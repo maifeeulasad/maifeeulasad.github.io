@@ -1,0 +1,53 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { site } from '../config/site';
+import { getCollection as getBlogCollection } from '../config/site';
+
+type AnyPost = CollectionEntry<'journal'> | CollectionEntry<'notes'>;
+
+interface Props {
+  post: AnyPost;
+  num?: number;
+  // When true, show which collection the post is in (used on home/mixed lists)
+  showCollection?: boolean;
+}
+const { post, num, showCollection = false } = Astro.props;
+
+const collection = getBlogCollection(post.collection) ?? { id: post.collection };
+const href = `${site.base}/${post.collection}/${post.id}/`;
+
+const summary =
+  post.data.description ??
+  (post.body ?? '').replace(/[`#*>_\[\]\n]/g, ' ').replace(/\s+/g, ' ').slice(0, 260).trim();
+
+const padded = num !== undefined ? (num < 10 ? '0' + num : String(num)) : undefined;
+const iso = post.data.date.toISOString().slice(0, 10);
+const human = post.data.date.toLocaleDateString('en', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+});
+---
+<article class="post-row">
+  <div class="lead">
+    {padded && <span class="num">{padded}</span>}
+    <div class="body">
+      <a class="title" href={href}>{post.data.title}</a>
+      <p class="excerpt">{summary}</p>
+      {(post.data.tags.length > 0 || showCollection) && (
+        <div class="pills">
+          {showCollection && (
+            <a class="pill" href={`${site.base}/${post.collection}/`}>{collection.id}</a>
+          )}
+          {post.data.tags.slice(0, 3).map((t) => (
+            <span class="pill">{t}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+  <div class="meta">
+    <time datetime={iso}>{human}</time>
+    <span class="icon">chevron_right</span>
+  </div>
+</article>

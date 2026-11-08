@@ -1,0 +1,205 @@
+---
+import '../styles/journal.css';
+import Icons from '../components/Icons.astro';
+import BrandIcon from '../components/BrandIcon.astro';
+import { site } from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  activeNav?: string;
+  // JSON-LD override for article pages
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description = site.description,
+  image = site.image,
+  noindex = false,
+  activeNav,
+  jsonLd,
+} = Astro.props;
+
+const fullTitle = title ? `${title} · ${site.title}` : `${site.title} · ${site.author}`;
+const canonical = new URL(Astro.url.pathname, site.url).toString();
+const ogImage = new URL(image, site.url).toString();
+
+const baseJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: `${site.title} · ${site.author}`,
+  url: `${site.url}${site.base}/`,
+  description: site.description,
+  author: {
+    '@type': 'Person',
+    name: site.author,
+    url: site.url,
+    sameAs: site.socials.filter((s) => s.href.startsWith('http')).map((s) => s.href),
+  },
+};
+const ld = jsonLd ?? baseJsonLd;
+
+const resolve = (p: string) => {
+  if (p.startsWith('http')) return p;
+  if (p === '/') return '/';
+  return p.startsWith('/blog') ? p : p;
+};
+---
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={`${site.base}/favicon.svg`} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content={title ? 'article' : 'website'} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={`${site.title} · ${site.author}`} />
+
+    <meta name="twitter:card" content={site.twitterCard} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.title} · ${site.author}`}
+      href={`${site.base}/rss.xml`}
+    />
+
+    <script is:inline>
+      try {
+        var t =
+          localStorage.getItem('theme') ||
+          (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+
+    <Icons />
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={`${site.base}/`}>
+          <span class="avatar">{site.initials}</span>
+          <span>
+            <span class="brand-name">{site.author}</span>
+            <span class="brand-sub">{site.tagline}</span>
+          </span>
+        </a>
+        <nav class="main-nav" aria-label="Main">
+          {site.nav.map((i) => (
+            <a
+              href={resolve(i.href)}
+              class={activeNav === i.href ? 'active' : undefined}
+              aria-current={activeNav === i.href ? 'page' : undefined}
+            >
+              {i.label}
+            </a>
+          ))}
+        </nav>
+        <div class="header-actions">
+          <button class="chip-btn" type="button" data-open-search aria-label="Search posts">
+            <span class="icon">search</span><span class="label">Search posts</span><kbd>⌘K</kbd>
+          </button>
+          {site.repo && (
+            <a
+              class="chip-btn gh-chip"
+              href={`https://github.com/${site.repo}`}
+              target="_blank"
+              rel="noopener"
+              title="Star on GitHub"
+              data-gh-repo={site.repo}
+            >
+              <span class="icon">star</span>
+              <span class="label">{site.repo.split('/')[0]}</span>
+              <span class="count" hidden></span>
+            </a>
+          )}
+          <a class="round-btn" href={`${site.base}/rss.xml`} aria-label="RSS feed">
+            <span class="icon">rss_feed</span>
+          </a>
+          <button class="round-btn" id="theme-toggle" type="button" aria-label="Toggle theme">
+            <span class="icon">dark_mode</span>
+          </button>
+          <button
+            class="round-btn menu-btn"
+            id="menu-toggle"
+            type="button"
+            aria-label="Menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <span class="icon">menu</span>
+          </button>
+        </div>
+      </div>
+      <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
+        {site.nav.map((i) => (
+          <a href={resolve(i.href)} class={activeNav === i.href ? 'active' : undefined}>
+            {i.label}
+          </a>
+        ))}
+      </nav>
+    </header>
+
+    <main>
+      <div class="wrap page-body">
+        <slot />
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div>
+          <strong>&copy; {new Date().getFullYear()} {site.author}.</strong>{' '}
+          <span class="mono">Powered by Astro</span>
+        </div>
+        <div class="links">
+          <a href={`https://github.com/${site.repo}`} title="GitHub repository">
+            <span class="icon">code</span>
+          </a>
+          <a href="/" title="Resume"><span class="icon">person</span></a>
+          <a href={`${site.base}/`} title="All posts"><span class="icon">terminal</span></a>
+          <a href={`${site.base}/rss.xml`} title="RSS feed">
+            <span class="icon">rss_feed</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-src={`${site.base}/search.json`}>
+      <div class="search-field">
+        <span class="icon">search</span>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search posts…"
+          autocomplete="off"
+          aria-label="Search posts"
+        />
+        <kbd>esc</kbd>
+      </div>
+      <ul class="search-results" id="search-results"></ul>
+    </dialog>
+
+    <script src={`${site.base}/js/site.js`}></script>
+
+    <!-- used by BrandIcon so the component is always picked up even when not rendered in this page -->
+    <template hidden><BrandIcon name="github" /></template>
+  </body>
+</html>

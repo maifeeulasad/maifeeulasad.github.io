@@ -1,0 +1,56 @@
+---
+import PostRow from './PostRow.astro';
+import type { CollectionEntry } from 'astro:content';
+import { site } from '../config/site';
+
+type AnyPost = CollectionEntry<'journal'> | CollectionEntry<'notes'>;
+
+interface Props {
+  posts: AnyPost[];
+  offset?: number;
+  breadcrumb: string;
+  pageLabel: string;
+  title: string;
+  total: number;
+  showCollection?: boolean;
+}
+const { posts, offset = 0, breadcrumb, pageLabel, title, total, showCollection = false } = Astro.props;
+
+const feedCmd = `curl -s ${site.url}${site.base}/rss.xml`;
+---
+<div class="list-head">
+  <div>
+    <div class="path">
+      <span>{breadcrumb}</span>
+      <span class="muted">·</span>
+      <span class="green">{pageLabel}</span>
+    </div>
+    <h1>{title} <span class="pill">{total} posts</span></h1>
+  </div>
+  <div class="switcher" role="group" aria-label="View">
+    <button type="button" data-view="compact" aria-pressed="true">
+      <span class="icon">format_list_bulleted</span>Compact
+    </button>
+    <button type="button" data-view="cards" aria-pressed="false">
+      <span class="icon">grid_view</span>Expanded
+    </button>
+  </div>
+</div>
+
+<div class="posts-list" id="posts-list">
+  {posts.map((p, i) => (
+    <PostRow post={p} num={offset + i + 1} showCollection={showCollection} />
+  ))}
+</div>
+
+<slot name="pager" />
+
+<div class="feed-tip">
+  <span>
+    <span class="icon green">terminal</span>
+    Subscribe via command line: <code>{feedCmd}</code>
+  </span>
+  <button type="button" data-copy={feedCmd}>
+    <span class="icon">content_copy</span><span>Copy</span>
+  </button>
+</div>
