@@ -1,0 +1,86 @@
+---
+import type { GetStaticPaths, GetStaticPathsItem } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Sidebar from '../../../components/Sidebar.astro';
+import PostList from '../../../components/PostList.astro';
+import Pager from '../../../components/Pager.astro';
+import { getCollection } from 'astro:content';
+import { collections, site, getCollection as getBlogCollection } from '../../../config/site';
+
+export const getStaticPaths = (async () => {
+  const items: GetStaticPathsItem[] = [];
+  for (const c of collections) {
+    const entries = await getCollection(c.id as 'journal' | 'notes');
+    const posts = entries
+      .filter((e) => !e.data.draft)
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+    const total = posts.length;
+    const lastPage = Math.max(1, Math.ceil(total / c.perPage));
+    for (let p = 2; p <= lastPage; p++) {
+      items.push({
+        params: { collection: c.id, page: String(p) },
+        props: {
+          id: c.id,
+          posts: posts.slice((p - 1) * c.perPage, p * c.perPage),
+          total,
+          lastPage,
+          current: p,
+        },
+      });
+    }
+  }
+  return items;
+}) satisfies GetStaticPaths;
+
+const { id, posts, total, lastPage, current } = Astro.props as {
+  id: 'journal' | 'notes';
+  posts: Awaited<ReturnType<typeof getCollection>>;
+  total: number;
+  lastPage: number;
+  current: number;
+};
+const cfg = getBlogCollection(id)!;
+
+const offset = (current - 1) * cfg.perPage;
+const first = offset + 1;
+const last = offset + posts.length;
+
+const pageUrl = (n: number) =>
+  n === 1 ? `${site.base}/${id}/` : `${site.base}/${id}/page/${n}/`;
+---
+<BaseLayout
+  activeNav={`/blog/${id}/`}
+  title={`${cfg.title} · page ${current}`}
+  description={cfg.description}
+>
+  <div class="home-grid">
+    <Sidebar active={id} />
+    <section>
+      <PostList
+        posts={posts}
+        offset={offset}
+        breadcrumb={cfg.breadcrumb}
+        pageLabel={`page ${current} of ${lastPage}`}
+        title={cfg.title}
+        total={total}
+      >
+        <Pager
+          slot="pager"
+          page={{
+            currentPage: current,
+            lastPage,
+            url: {
+              prev: current > 1 ? pageUrl(current - 1) : undefined,
+              next: current < lastPage ? pageUrl(current + 1) : undefined,
+              current: pageUrl(current),
+            },
+          }}
+          first={first}
+          last={last}
+          total={total}
+          pageUrl={pageUrl}
+        />
+      </PostList>
+    </section>
+  </div>
+</BaseLayout>

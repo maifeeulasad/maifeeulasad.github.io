@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import PostList from '../components/PostList.astro';
+import Pager from '../components/Pager.astro';
+import { getCollection } from 'astro:content';
+import { collections, site } from '../config/site';
+
+// Home page: a single mixed feed of all collections featured in site config, newest first.
+const featured = collections.filter((c) => c.featured).map((c) => c.id);
+let all: Awaited<ReturnType<typeof getCollection>> = [];
+for (const id of featured) {
+  const entries = await getCollection(id as 'journal' | 'notes');
+  all = all.concat(entries.filter((e) => !e.data.draft));
+}
+all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const PER_PAGE = 10;
+const total = all.length;
+const posts = all.slice(0, PER_PAGE);
+const lastPage = Math.max(1, Math.ceil(total / PER_PAGE));
+const first = total === 0 ? 0 : 1;
+const last = Math.min(PER_PAGE, total);
+
+const pageUrl = (n: number) => (n === 1 ? `${site.base}/` : `${site.base}/page/${n}/`);
+---
+<BaseLayout activeNav="/blog/">
+  <div class="home-grid">
+    <Sidebar active="Journal" />
+    <section>
+      <PostList
+        posts={posts}
+        offset={0}
+        breadcrumb="~/writing"
+        pageLabel={`page 1 of ${lastPage}`}
+        title={site.title}
+        total={total}
+        showCollection
+      >
+        <Pager
+          slot="pager"
+          page={{
+            currentPage: 1,
+            lastPage,
+            url: {
+              prev: undefined,
+              next: lastPage > 1 ? pageUrl(2) : undefined,
+              current: pageUrl(1),
+            },
+          }}
+          first={first}
+          last={last}
+          total={total}
+          pageUrl={pageUrl}
+        />
+      </PostList>
+    </section>
+  </div>
+</BaseLayout>

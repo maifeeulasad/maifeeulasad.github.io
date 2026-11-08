@@ -1,0 +1,205 @@
+---
+import type { GetStaticPaths, GetStaticPathsItem } from 'astro';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BrandIcon from '../../components/BrandIcon.astro';
+import { site, collections, getCollection as getBlogCollection } from '../../config/site';
+
+export const getStaticPaths = (async () => {
+  const items: GetStaticPathsItem[] = [];
+  for (const c of collections) {
+    const entries = await getCollection(c.id as 'journal' | 'notes');
+    const posts = entries
+      .filter((e) => !e.data.draft)
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+    posts.forEach((post, i) => {
+      items.push({
+        params: { collection: c.id, slug: post.id },
+        props: {
+          id: c.id,
+          post,
+          prev: posts[i + 1],
+          next: posts[i - 1],
+        },
+      });
+    });
+  }
+  return items;
+}) satisfies GetStaticPaths;
+
+const { id, post, prev, next } = Astro.props as {
+  id: 'journal' | 'notes';
+  post: Awaited<ReturnType<typeof getCollection>>[number];
+  prev?: Awaited<ReturnType<typeof getCollection>>[number];
+  next?: Awaited<ReturnType<typeof getCollection>>[number];
+};
+
+const cfg = getBlogCollection(id)!;
+const { Content, headings } = await render(post);
+
+const bodyText = (post.body ?? '').replace(/[`#*>_\[\]\n]/g, ' ');
+const words = bodyText.trim().split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 200));
+
+const iso = post.data.date.toISOString();
+const human = post.data.date.toLocaleDateString('en', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+});
+
+const shareUrl = encodeURIComponent(`${site.url}${site.base}/${id}/${post.id}/`);
+const shareTitle = encodeURIComponent(post.data.title);
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description ?? cfg.description,
+  datePublished: iso,
+  dateModified: post.data.updated ? post.data.updated.toISOString() : iso,
+  author: { '@type': 'Person', name: site.author, url: site.url },
+  mainEntityOfPage: `${site.url}${site.base}/${id}/${post.id}/`,
+  keywords: post.data.tags.join(', '),
+};
+
+const linkedin = site.socials.find((s) => s.brand === 'linkedin');
+const github = site.socials.find((s) => s.brand === 'github');
+const authorLink = linkedin ?? github;
+const authorHost = authorLink?.href.replace(/^https?:\/\//, '').replace(/^www\./, '');
+---
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image ?? site.image}
+  activeNav={`/blog/${id}/`}
+  jsonLd={articleLd}
+>
+  <div class="article-head">
+    <div class="breadcrumb">
+      <a href="/"><span class="icon">home</span>Home</a>
+      <span class="sep">/</span>
+      <a href={`${site.base}/${id}/`}>{cfg.title}</a>
+    </div>
+    {post.data.tags.length > 0 && (
+      <div class="pills">
+        {post.data.tags.map((t) => (
+          <span class="pill">#{t}</span>
+        ))}
+      </div>
+    )}
+    <h1 class="article-title">{post.data.title}</h1>
+    <div class="byline">
+      <div class="who">
+        <span class="avatar">{site.initials}</span>
+        <div>
+          <a class="name" href="/">{site.author}</a>
+          <div class="sub">
+            <time datetime={iso}>{human}</time>
+            <span>·</span>
+            <span><span class="icon">schedule</span> {minutes} min read</span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="outline-btn" id="copy-link" type="button">
+          <span class="icon">link</span><span>Copy link</span>
+        </button>
+        <div class="share">
+          <button
+            class="outline-btn"
+            id="share-btn"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="share-menu"
+          >
+            <span class="icon">share</span><span>Share</span>
+          </button>
+          <div class="share-menu" id="share-menu" hidden>
+            <a href={`https://x.com/intent/post?text=${shareTitle}&url=${shareUrl}`} target="_blank" rel="noopener">
+              <BrandIcon name="x" />X
+            </a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="noopener">
+              <BrandIcon name="linkedin" />LinkedIn
+            </a>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`} target="_blank" rel="noopener">
+              <BrandIcon name="facebook" />Facebook
+            </a>
+            <a href={`mailto:?subject=${shareTitle}&body=${shareUrl}`}>
+              <span class="icon">mail</span>Email
+            </a>
+            <button type="button" id="share-native" hidden>
+              <span class="icon">ios_share</span>More…
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-grid">
+    <div>
+      <article class="prose">
+        <Content />
+      </article>
+
+      <div class="card author-card">
+        <span class="avatar">{site.initials}</span>
+        <div>
+          <h3>Written by {site.author} <span class="pill mono">Author</span></h3>
+          <p>{site.about}</p>
+          <div class="links">
+            {authorLink && (
+              <a href={authorLink.href} target="_blank" rel="noopener">
+                {authorLink.brand && <BrandIcon name={authorLink.brand} />}
+                {authorHost}
+              </a>
+            )}
+            <a href={`${site.base}/rss.xml`}>
+              <span class="icon">feed</span>RSS feed
+            </a>
+            <a class="green" href="/">More about me</a>
+          </div>
+        </div>
+      </div>
+
+      {(prev || next) && (
+        <div class="post-nav">
+          {prev ? (
+            <a href={`${site.base}/${prev.collection}/${prev.id}/`}>
+              <span class="eyebrow"><span class="icon">arrow_back</span>Previous post</span>
+              <strong>{prev.data.title}</strong>
+            </a>
+          ) : (
+            <span></span>
+          )}
+          {next && (
+            <a class="next" href={`${site.base}/${next.collection}/${next.id}/`}>
+              <span class="eyebrow">Next post<span class="icon">arrow_forward</span></span>
+              <strong>{next.data.title}</strong>
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+
+    <aside class="card toc" id="toc">
+      <div class="toc-head">
+        <span><span class="icon">menu_book</span>Contents</span>
+        <span class="muted" id="toc-count"></span>
+      </div>
+      <nav id="toc-nav"></nav>
+      <div class="toc-meta">
+        <div><span>Published</span><span class="mono">{human}</span></div>
+        <div><span>Reading time</span><span class="mono">{minutes} min</span></div>
+        {post.data.tags.length > 0 && (
+          <div>
+            <span>Topics</span>
+            <span class="mono green">{post.data.tags.join(', ')}</span>
+          </div>
+        )}
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
