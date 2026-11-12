@@ -101,6 +101,34 @@ const Footer = () => {
           </div>
         </div>
 
+        <div className="mb-12 sm:mb-16 border-t border-black pt-8 sm:pt-10">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+            <div>
+              <h3 className="text-gray-400 text-sm font-medium tracking-wider mb-3">Writing</h3>
+              <p className="text-black text-2xl sm:text-3xl md:text-4xl font-medium leading-tight max-w-2xl">
+                Notes, write-ups and experiments — from engineering to ML.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="/writing/"
+                className="inline-flex items-center px-5 py-3 bg-black text-white font-medium hover:bg-gray-800 transition-colors"
+              >
+                Read the blog
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+              <a
+                href="/writing/rss.xml"
+                className="inline-flex items-center px-5 py-3 border border-black text-black font-medium hover:bg-black hover:text-white transition-colors"
+              >
+                RSS feed
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div className="relative">
           <h1 className="text-[20vw] sm:text-[18vw] md:text-[14vw] lg:text-[12vw] xl:text-[10vw] font-black leading-[0.7] tracking-tighter uppercase text-black whitespace-nowrap">
             MAIFEE UL ASAD
