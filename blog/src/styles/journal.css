@@ -85,6 +85,9 @@ button {
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
+  text-transform: none;
+  letter-spacing: normal;
+  font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
 .mono {
