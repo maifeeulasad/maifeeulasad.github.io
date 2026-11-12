@@ -10,10 +10,14 @@ const About = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return;
-      
+
       const rect = sectionRef.current.getBoundingClientRect();
-      const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / window.innerHeight));
-      const wordsToShow = Math.floor(scrollProgress * words.length);
+      const scrollRange = rect.height - window.innerHeight;
+      const scrolled = -rect.top;
+      const scrollProgress = scrollRange > 0
+        ? Math.max(0, Math.min(1, scrolled / scrollRange))
+        : 0;
+      const wordsToShow = Math.ceil(scrollProgress * words.length);
       setVisibleWords(wordsToShow);
     };
 
